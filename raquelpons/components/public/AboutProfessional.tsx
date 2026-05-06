@@ -63,14 +63,15 @@ export default function AboutProfessional({ settings, contentMap = {} }: AboutPr
             transition={{ duration: 0.7, delay: 0.1 }}
             className="relative"
           >
-            {/* Imagen placeholder premium */}
+            {/* Imagen real de la tía */}
             <div className="aspect-[3/4] max-w-sm mx-auto lg:mx-0 lg:ml-auto rounded-soft bg-gradient-to-br from-nude via-champagne/30 to-dustyRose/40 flex items-end overflow-hidden relative">
-              <div className="absolute inset-0 flex items-center justify-center text-center p-8 opacity-30">
-                <div className="space-y-3">
-                  <div className="w-20 h-20 mx-auto rounded-full border border-champagne" />
-                  <p className="font-display italic text-2xl text-elegantBrown">
-                    {settings.brandName.split('_')[0]}
-                  </p>
+              <div className="absolute inset-0 flex items-center justify-center text-center p-8">
+                <div className="w-32 h-32 mx-auto rounded-full overflow-hidden border border-champagne shadow-soft">
+                  <img
+                    src="/images/raquelpons-tia-2.jpg"
+                    alt="Foto real de la tía"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
               </div>
               <div className="relative z-10 p-6 bg-gradient-to-t from-anthracite/80 to-transparent w-full">
