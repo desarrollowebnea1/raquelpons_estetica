@@ -1,0 +1,230 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  SUPERADMIN
+}
+
+enum AppointmentStatus {
+  NEW
+  CONTACTED
+  CONFIRMED
+  CANCELLED
+  FINISHED
+}
+
+enum InquiryStatus {
+  NEW
+  CONTACTED
+  PAYMENT_PENDING
+  DELIVERED
+  CANCELLED
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         Role     @default(ADMIN)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model BusinessSettings {
+  id              String   @id @default(cuid())
+  brandName       String   @default("RAQUELPONS_ESTETICA")
+  slogan          String   @default("Dermocosmética profesional y estética integral")
+  heroTitle       String   @default("Dermocosmética profesional para una piel que respira equilibrio")
+  heroItalicWord  String   @default("The Glow")
+  heroDescription String   @default("Tratamientos faciales y corporales personalizados, aparatología estética avanzada y una boutique curada de productos dermatológicos premium.")
+  logoUrl         String?
+  heroImageUrl    String?
+  heroVideoUrl    String?
+  whatsappNumber  String   @default("5493790000000")
+  instagramUrl    String   @default("https://instagram.com/raquelpons_estetica")
+  facebookUrl     String?
+  address         String   @default("Córdoba, Argentina · Consultorio privado")
+  googleMapsUrl   String?
+  mapEmbedUrl     String?
+  openingHours    String   @default("Atención con turno previo")
+  aboutText       String   @default("RAQUELPONS_ESTETICA nace desde una mirada integral del cuidado facial y corporal, combinando formación profesional, experiencia en estética avanzada y selección responsable de productos dermocosméticos.")
+  trainingText    String   @default("Formación profesional en España y experiencia en estética avanzada.")
+  experienceText  String   @default("Licenciada en Kinesiología y Fisioterapia, con formación en dermocosmética, aparatología estética y cuidado integral de la piel.")
+  legalText       String   @default("La información publicada tiene fines informativos y no reemplaza una evaluación profesional personalizada.")
+  ogImageUrl      String?
+  showBeforeAfter Boolean  @default(true)
+  showTestimonials Boolean @default(true)
+  enableProducts  Boolean  @default(true)
+  enableAppointments Boolean @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model ServiceCategory {
+  id        String    @id @default(cuid())
+  name      String
+  slug      String    @unique
+  active    Boolean   @default(true)
+  sortOrder Int       @default(0)
+  services  Service[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Service {
+  id               String          @id @default(cuid())
+  name             String
+  slug             String          @unique
+  objective        String?
+  sensation        String?
+  treatmentTime    String?
+  shortDescription String?
+  longDescription  String?
+  benefits         String?
+  contraindications String?
+  duration         String?
+  price            Float?
+  imageUrl         String?
+  active           Boolean         @default(true)
+  featured         Boolean         @default(false)
+  sortOrder        Int             @default(0)
+  categoryId       String
+  category         ServiceCategory @relation(fields: [categoryId], references: [id])
+  appointments     AppointmentRequest[]
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+}
+
+model ProductCategory {
+  id        String    @id @default(cuid())
+  name      String
+  slug      String    @unique
+  active    Boolean   @default(true)
+  sortOrder Int       @default(0)
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model SkinConcern {
+  id        String    @id @default(cuid())
+  name      String
+  slug      String    @unique
+  active    Boolean   @default(true)
+  sortOrder Int       @default(0)
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Product {
+  id             String          @id @default(cuid())
+  name           String
+  slug           String          @unique
+  brand          String?
+  laboratory     String?
+  description    String?
+  price          Float?
+  stock          Int?
+  imageUrl       String?
+  usage          String?
+  warnings       String?
+  active         Boolean         @default(true)
+  featured       Boolean         @default(false)
+  sortOrder      Int             @default(0)
+  categoryId     String?
+  category       ProductCategory? @relation(fields: [categoryId], references: [id])
+  skinConcernId  String?
+  skinConcern    SkinConcern?    @relation(fields: [skinConcernId], references: [id])
+  inquiryItems   ProductInquiryItem[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+}
+
+model AppointmentRequest {
+  id              String            @id @default(cuid())
+  customerName    String
+  whatsapp        String
+  serviceId       String?
+  service         Service?          @relation(fields: [serviceId], references: [id])
+  serviceName     String
+  preferredDay    String?
+  preferredTime   String?
+  message         String?
+  whatsappMessage String?
+  status          AppointmentStatus @default(NEW)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+}
+
+model ProductInquiry {
+  id              String         @id @default(cuid())
+  customerName    String
+  whatsapp        String
+  message         String?
+  subtotal        Float          @default(0)
+  whatsappMessage String?
+  status          InquiryStatus  @default(NEW)
+  items           ProductInquiryItem[]
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+}
+
+model ProductInquiryItem {
+  id         String         @id @default(cuid())
+  inquiryId  String
+  inquiry    ProductInquiry @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+  productId  String?
+  product    Product?       @relation(fields: [productId], references: [id])
+  productName String
+  quantity   Int            @default(1)
+  unitPrice  Float          @default(0)
+  totalPrice Float          @default(0)
+}
+
+model Testimonial {
+  id           String   @id @default(cuid())
+  customerName String
+  text         String
+  serviceName  String?
+  active       Boolean  @default(true)
+  sortOrder    Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model BeforeAfter {
+  id             String   @id @default(cuid())
+  title          String
+  serviceName    String?
+  beforeImageUrl String?
+  afterImageUrl  String?
+  description    String?
+  active         Boolean  @default(true)
+  sortOrder      Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+
+model SiteContent {
+  id        String   @id @default(cuid())
+  section   String
+  key       String   @unique
+  label     String
+  value     String
+  type      String   @default("text")
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

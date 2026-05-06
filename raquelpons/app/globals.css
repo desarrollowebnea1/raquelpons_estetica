@@ -1,0 +1,218 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --parchment: #F9F8F6;
+  --warm-white: #FAF8F5;
+  --anthracite: #2C2C2C;
+  --champagne: #D1BFA7;
+  --nude: #EADFD6;
+  --dusty-rose: #D8B7A6;
+  --elegant-brown: #6F5148;
+  --sage: #A8B8A0;
+  --border: rgba(44,44,44,0.10);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--parchment);
+  color: var(--anthracite);
+  font-family: 'Inter', system-ui, sans-serif;
+  letter-spacing: -0.02em;
+  line-height: 1.6;
+}
+
+/* ─── Tipografía ─────────────────────────────────────────────── */
+.font-display {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+h1, h2, h3 {
+  font-family: 'Playfair Display', Georgia, serif;
+  line-height: 1.2;
+}
+
+/* ─── Scrollbar elegante ─────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: var(--warm-white);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--champagne);
+  border-radius: 2px;
+}
+
+/* ─── Selección de texto ─────────────────────────────────────── */
+::selection {
+  background: var(--nude);
+  color: var(--anthracite);
+}
+
+/* ─── Focus states elegantes ─────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--champagne);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ─── Utilidades personalizadas ──────────────────────────────── */
+@layer utilities {
+  .text-refined {
+    letter-spacing: -0.02em;
+  }
+
+  .text-spaced {
+    letter-spacing: 0.08em;
+  }
+
+  .text-ultraspaced {
+    letter-spacing: 0.15em;
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, var(--elegant-brown), var(--champagne));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .section-padding {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+
+  @media (min-width: 768px) {
+    .section-padding {
+      padding-top: 8rem;
+      padding-bottom: 8rem;
+    }
+  }
+
+  .container-premium {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .container-premium {
+      padding-left: 3rem;
+      padding-right: 3rem;
+    }
+  }
+}
+
+/* ─── Componentes base ────────────────────────────────────────── */
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-7 py-3.5 
+           bg-anthracite text-warmWhite text-sm tracking-refined 
+           rounded-organic transition-all duration-500 
+           hover:bg-elegantBrown hover:shadow-medium
+           focus-visible:ring-2 focus-visible:ring-champagne focus-visible:ring-offset-2;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-7 py-3.5 
+           border border-anthracite text-anthracite text-sm tracking-refined 
+           rounded-organic transition-all duration-500 
+           hover:bg-nude hover:border-elegantBrown
+           focus-visible:ring-2 focus-visible:ring-champagne focus-visible:ring-offset-2;
+  }
+
+  .btn-champagne {
+    @apply inline-flex items-center justify-center gap-2 px-7 py-3.5 
+           bg-champagne text-anthracite text-sm tracking-refined 
+           rounded-organic transition-all duration-500 
+           hover:bg-dustyRose hover:shadow-medium;
+  }
+
+  .btn-whatsapp {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 
+           bg-[#25D366] text-white text-sm tracking-refined 
+           rounded-organic transition-all duration-300 
+           hover:bg-[#20BA5A] hover:shadow-medium;
+  }
+
+  .card-premium {
+    @apply bg-warmWhite border border-[rgba(44,44,44,0.08)] rounded-soft 
+           shadow-card transition-all duration-500 
+           hover:shadow-medium hover:-translate-y-0.5;
+  }
+
+  .input-premium {
+    @apply w-full px-4 py-3 bg-warmWhite border border-[rgba(44,44,44,0.15)] 
+           rounded-xl text-anthracite text-sm tracking-refined 
+           placeholder:text-[rgba(44,44,44,0.40)]
+           focus:outline-none focus:border-champagne focus:ring-1 focus:ring-champagne 
+           transition-all duration-300;
+  }
+
+  .label-premium {
+    @apply block text-xs font-medium text-anthracite tracking-wide uppercase mb-1.5;
+  }
+
+  .section-label {
+    @apply text-xs font-medium tracking-[0.22em] uppercase text-elegantBrown;
+  }
+
+  .divider-soft {
+    @apply w-16 h-px bg-champagne mx-auto my-6;
+  }
+}
+
+/* ─── Admin panel ─────────────────────────────────────────────── */
+.admin-sidebar {
+  background: var(--anthracite);
+  color: var(--warm-white);
+}
+
+.admin-nav-item {
+  @apply flex items-center gap-3 px-4 py-2.5 text-sm rounded-lg 
+         text-[rgba(250,248,245,0.7)] transition-all duration-200 
+         hover:text-warmWhite hover:bg-[rgba(255,255,255,0.08)];
+}
+
+.admin-nav-item.active {
+  @apply text-warmWhite bg-[rgba(255,255,255,0.12)];
+}
+
+/* ─── Animaciones ──────────────────────────────────────────────── */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--nude) 25%, var(--warm-white) 50%, var(--nude) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* ─── Mapa en escala de grises ─────────────────────────────────── */
+.map-grayscale {
+  filter: grayscale(100%) contrast(0.8) brightness(1.1);
+}
+
+/* ─── Print ─────────────────────────────────────────────────────── */
+@media print {
+  .no-print { display: none !important; }
+}
